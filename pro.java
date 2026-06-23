@@ -39,7 +39,7 @@ public class pro {
                 a[8][i]='P';
             }
         }
-        //Lowercase -- Black 
+        //Lowercase -- Black
         a[2][2]=a[2][9]='r';
         a[2][3]=a[2][8]='n';
         a[2][4]=a[2][7]='b';
@@ -53,7 +53,7 @@ public class pro {
         //Console Initial Outputs
         System.out.println("--Black : Lowercase [p,n,r,b,q,k]");
         System.out.println("--White : Uppercase [P,N,R,B,Q,K]");
-        System.out.println("P,p -- Pawn");
+        System.out.println("P,p -- Solider");
         System.out.println("N,n -- Knight");
         System.out.println("R,r -- Rook");
         System.out.println("B,b -- Bishop");
@@ -65,18 +65,18 @@ public class pro {
             }
             System.out.println();
         }
-        while (true) { 
+        while (true) {
             System.out.print("Enter your Move : ");
             String input = amg.nextLine();
-            String[] parts = input.split(" "); 
+            String[] parts = input.split(" ");
             if (parts.length == 2) {
                 identify(parts[0], parts[1], a);
-            } 
+            }
         }
     }
     public static void identify(String f,String t,char [][]a){
         int f1 = '8' - f.charAt(1) + 2;
-        int f2 = f.charAt(0) - 'a' + 2; 
+        int f2 = f.charAt(0) - 'a' + 2;
         int t1 = '8' - t.charAt(1) + 2;
         int t2 = t.charAt(0) - 'a' + 2;
         if(a[f1][f2]=='r'){
@@ -120,10 +120,10 @@ public class pro {
         System.out.print("Enter valid Move : ");
         Scanner amg=new Scanner(System.in);
         String s=amg.nextLine();
-        String[] parts = s.split(" "); 
+        String[] parts = s.split(" ");
         if (parts.length == 2) {
             identify(parts[0], parts[1], a);
-        } 
+        }
         else {
             System.out.println("Invalid format. Use: e2 e4");
         }
@@ -137,17 +137,9 @@ public class pro {
     public static void wking(int f1,int f2,int t1,int t2,char a[][]){
     }
     public static void wknight(int a,int b,int c,int d,char[][] y){
-        int row,col;
-        if(a>c)
-                row=a-c;
-        else 
-                row=c-a;
-        if(b>d)
-                col=b-d;
-        else 
-                col=d-b;
-        
-     if((row==2&&col==1)||(row==1&&col==2)){
+        int row=a>c?a-c:c-a;
+        int col=b>d?b-d:d-b;
+        if((row==2&&col==1)||(row==1&&col==2)){
             if(c>=2&&c<=9&&d>=2&&d<=9){
                 char t=y[c][d];
                 if(t=='P'||t=='N'||t=='R'||t=='B'||t=='Q'||t=='K'){
@@ -168,22 +160,15 @@ public class pro {
                 System.out.println("Invalid Move");
                 displayWhite(y);
             }
-     }
-     else{
+        }
+        else{
             System.out.println("Invalid Move");
             displayWhite(y);
         }
     }
     public static void bknight(int a, int b, int c, int d, char[][] y) {
-        int row,col;
-        if(a>c)
-            row=a-c;
-        else
-            row=c-a;
-        if(b>d)
-            col=b-d;
-        else
-            col=d-b;
+        int row=a>c?a-c:c-a;
+        int col=b>d?b-d:d-b;
         if((row==2&&col==1)||(row==1&&col==2)){
             if(c>=2&&c<=9&&d>=2&&d<=9){
                 char t=y[c][d];
@@ -217,17 +202,15 @@ public class pro {
     public static void wbishop(int f1,int f2,int t1,int t2,char a[][]){
     }
     public static void bpawn(int f1,int f2,int t1,int t2,char a[][]){
-        int c=1;
         if((t1-f1)>2){
             System.out.println("Invalid Move ! -- Enter Valid Move");
             displayBlack(a);
         }
         else if(a[t1][t2]=='.'&&a[f1+1][f2]=='.'&&f2==t2){
-            if(c>0&&f1==3){
+            if(f1==3){
                 a[t1][t2]=a[f1][f2];
                 a[f1][f2]='.';
                 System.out.println("Moved Successfully !");
-                c--;
                 displayWhite(a);
             }
             else if(f1!=8&&(t1-f1)==1){
@@ -248,32 +231,22 @@ public class pro {
             System.out.println("One Coin Captured");
             displayWhite(a);
         }
-        else if(a[t1][t2]>=97&&a[t1][t2]<=122){
-            System.out.println("Invalid Move ! -- Enter Valid Move");
-            displayBlack(a);
-        }
-        else if(a[t1][t2]>=65&&a[t1][t2]<=90){
-            System.out.println("Invalid Move ! -- Enter Valid Move");
-            displayBlack(a);
-        }
         else{
             System.out.println("Invalid Move ! -- Enter Valid Move");
             displayBlack(a);
         }
     }
     public static void wpawn(int f1,int f2,int t1,int t2,char a[][]){
-        int c=1;
         if((f1-t1)>2){
             System.out.println("Invalid Move ! -- Enter Valid Move");
             displayWhite(a);
         }
         //First Pawn's Move
         else if(a[t1][t2]=='.'&&a[f1-1][f2]=='.'&&f2==t2){
-            if(c>0&&f1==8){
+            if(f1==8){
                 a[t1][t2]=a[f1][f2];
                 a[f1][f2]='.';
                 System.out.println("Moved Successfully !");
-                c--;
                 displayBlack(a);
             }
             else if(f1!=8&&(f1-t1)==1){
@@ -295,23 +268,62 @@ public class pro {
             System.out.println("One Coin Captured");
             displayBlack(a);
         }
-        else if(a[t1][t2]>=65&&a[t1][t2]<=90){
-            System.out.println("Invalid Move ! -- Enter Valid Move");
-            displayWhite(a);
-        }
-        else if(a[t1][t2]>=97&&a[t1][t2]<=122){
-            System.out.println("Invalid Move ! -- Enter Valid Move");
-            displayWhite(a);
-        }
         else{
             System.out.println("Invalid Move ! -- Enter Valid Move");
             displayWhite(a);
         }
         //System.out.println(f1+" "+f2+" "+t1+" "+t2);
     }
-    public static void brook(int f1,int f2,int t1,int t2,char a[][]){
+    public static void wrook(int a,int b,int c,int d,char y[][]){
+        int row=a>c?a-c:c-a;
+        int col=b>d?b-d:d-b;
+        int k,l,m,n;
+        k=a>c?c:a;
+        l=a<c?c:a;
+        m=b>d?d:b;
+        n=b<d?d:b;
+        if(row>0&&col==0||row==0&&col>0){
+        if(row>0&&col==0){
+            for(int i=k;i<l;i++){
+                if(y[c][d]=='P'||y[c][d]=='N'||y[c][d]=='R'||y[c][d]=='B'||y[c][d]=='Q'){
+                    System.out.println("Invalid input ! -- Enter Valid Move");
+                    return;
+                }
+            }
+            if(y[c][d]=='p'||y[c][d]=='n'||y[c][d]=='r'||y[c][d]=='b'||y[c][d]=='q') {
+                System.out.println("One Coin Captured");
+            }
+                y[a][b] = '.';
+                y[c][d] = 'R';
+                System.out.println("Moved Successfully !");
+                displayBlack(y);
+
+
+            }
+        else if (row==0&&col>0) {
+            for(int i=m;i<n;i++){
+                if(y[c][d]=='P'||y[c][d]=='N'||y[c][d]=='R'||y[c][d]=='B'||y[c][d]=='Q'){
+                    System.out.println("Invalid input ! -- Enter Valid Move");
+                    return;
+                }
+            }
+            if(y[c][d]=='p'||y[c][d]=='n'||y[c][d]=='r'||y[c][d]=='b'||y[c][d]=='q') {
+                System.out.println("One Coin Captured");
+            }
+                y[a][b] = '.';
+                y[c][d] = 'R';
+
+                System.out.println("Moved Successfully !");
+                displayBlack(y);
+
+
+            }
+
+        }
+        else
+            System.out.println("Invalid input ! -- Enter Valid Move");
     }
-    public static void wrook(int f1,int f2,int t1,int t2,char a[][]){
+    public static void brook(int f1,int f2,int t1,int t2,char a[][]){
     }
     public static void displayWhite(char a[][]){
         for (int i = 0; i < 11; i++) {
@@ -332,12 +344,3 @@ public class pro {
         System.out.println("Now Black's Turn-----");
     }
 }
-
-
-
-
-
-
-
-
-
