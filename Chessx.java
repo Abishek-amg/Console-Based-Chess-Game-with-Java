@@ -54,7 +54,7 @@ public class Chessx {
         System.out.println("--Black : Lowercase [p,n,r,b,q,k]");
         System.out.println("--White : Uppercase [P,N,R,B,Q,K]");
         System.out.println("P,p -- Solider");
-        System.out.println("N,n -- Knight");
+        System.out.println("N,n -- Knigh");
         System.out.println("R,r -- Rook");
         System.out.println("B,b -- Bishop");
         System.out.println("Q,q -- Queen");
