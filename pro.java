@@ -65,6 +65,7 @@ public class pro {
             }
             System.out.println();
         }
+        System.out.println("First White's Move.....");
         while (true) {
             System.out.print("Enter your Move : ");
             String input = amg.nextLine();
@@ -74,273 +75,419 @@ public class pro {
             }
         }
     }
-    public static void identify(String f,String t,char [][]a){
+    public static void identify(String f, String t, char[][] a) {
         int f1 = '8' - f.charAt(1) + 2;
         int f2 = f.charAt(0) - 'a' + 2;
         int t1 = '8' - t.charAt(1) + 2;
         int t2 = t.charAt(0) - 'a' + 2;
-        if(a[f1][f2]=='r'){
-            brook(f1,f2,t1,t2,a);
-        }
-        else if(a[f1][f2]=='R'){
-            wrook(f1,f2,t1,t2,a);
-        }
-        else if(a[f1][f2]=='b'){
-            bbishop(f1,f2,t1,t2,a);
-        }
-        else if(a[f1][f2]=='B'){
-            wbishop(f1,f2,t1,t2,a);
-        }
-        else if(a[f1][f2]=='k'){
-            bking(f1,f2,t1,t2,a);
-        }
-        else if(a[f1][f2]=='K'){
-            wking(f1,f2,t1,t2,a);
-        }
-        else if(a[f1][f2]=='q'){
-            bqueen(f1,f2,t1,t2,a);
-        }
-        else  if(a[f1][f2]=='Q'){
-            wqueen(f1,f2,t1,t2,a);
-        }
-        else if(a[f1][f2]=='p'){
-            bpawn(f1,f2,t1,t2,a);
-        }
-        else if(a[f1][f2]=='P'){
-            wpawn(f1,f2,t1,t2,a);
-        }
-        else if(a[f1][f2]=='n'){
-            bknight(f1,f2,t1,t2,a);
-        }
-        else if(a[f1][f2]=='N'){
-            wknight(f1,f2,t1,t2,a);
+        char piece = a[f1][f2];
+        switch (piece) {
+            case 'p': bpawn(f1, f2, t1, t2, a);   break;
+            case 'P': wpawn(f1, f2, t1, t2, a);   break;
+            case 'r': brook(f1, f2, t1, t2, a);   break;
+            case 'R': wrook(f1, f2, t1, t2, a);   break;
+            case 'n': bknight(f1, f2, t1, t2, a); break;
+            case 'N': wknight(f1, f2, t1, t2, a); break;
+            case 'b': bbishop(f1, f2, t1, t2, a); break;
+            case 'B': wbishop(f1, f2, t1, t2, a); break;
+            case 'q': bqueen(f1, f2, t1, t2, a);  break;
+            case 'Q': wqueen(f1, f2, t1, t2, a);  break;
+            case 'k': bking(f1, f2, t1, t2, a);   break;
+            case 'K': wking(f1, f2, t1, t2, a);   break;
+            default:
+                System.out.println("Invalid Move !!");
+                break;
         }
     }
-    public static void wrongInput(char [][]a){
-        System.out.print("Enter valid Move : ");
-        Scanner amg=new Scanner(System.in);
-        String s=amg.nextLine();
-        String[] parts = s.split(" ");
-        if (parts.length == 2) {
-            identify(parts[0], parts[1], a);
-        }
+    public static void check(boolean isValid ,boolean isCapture,char [][]y,int a,int b,int c,int d){
+        char t=y[a][b];
+        if (isValid) {
+            y[c][d] = y[a][b];
+            y[a][b] = '.';
+            System.out.println("Moved Successfully !");
+            if (isCapture)
+                System.out.println("One Piece Captured !");
+            if(Character.isLowerCase(y[a][b]))
+                display(y);
+        } 
         else {
-            System.out.println("Invalid format. Use: e2 e4");
-        }
-    }
-    public static void bqueen(int f1,int f2,int t1,int t2,char a[][]){
-    }
-    public static void wqueen(int f1,int f2,int t1,int t2,char a[][]){
-    }
-    public static void bking(int f1,int f2,int t1,int t2,char a[][]){
-    }
-    public static void wking(int f1,int f2,int t1,int t2,char a[][]){
-    }
-    public static void wknight(int a,int b,int c,int d,char[][] y){
-        int row=a>c?a-c:c-a;
-        int col=b>d?b-d:d-b;
-        if((row==2&&col==1)||(row==1&&col==2)){
-            if(c>=2&&c<=9&&d>=2&&d<=9){
-                char t=y[c][d];
-                if(t=='P'||t=='N'||t=='R'||t=='B'||t=='Q'||t=='K'){
-                    System.out.println("Invalid Move");
-                    displayWhite(y);
-                }
-                else{
-                    y[c][d]='N';
-                    y[a][b]='.';
-                    if(t=='p'||t=='n'||t=='r'||t=='b'||t=='q'){
-                        System.out.println("One Coin Captured");
-                    }
-                    System.out.println("Moved Successfully");
-                    displayBlack(y);
-                }
-            }
-            else{
-                System.out.println("Invalid Move");
-                displayWhite(y);
-            }
-        }
-        else{
-            System.out.println("Invalid Move");
-            displayWhite(y);
-        }
-    }
-    public static void bknight(int a, int b, int c, int d, char[][] y) {
-        int row=a>c?a-c:c-a;
-        int col=b>d?b-d:d-b;
-        if((row==2&&col==1)||(row==1&&col==2)){
-            if(c>=2&&c<=9&&d>=2&&d<=9){
-                char t=y[c][d];
-                if(t=='p'||t=='n'||t=='r'||t=='b'||t=='q'||t=='k'){
-                    System.out.println("Invalid Move");
-                    displayBlack(y);
-                }
-                else{
-                    y[c][d]='n';
-                    y[a][b]='.';
-                    if(t=='P'||t=='N'||t=='R'||t=='B'||t=='Q'){
-                        System.out.println("One Coin captured");
-
-                    }
-                    System.out.println("Moved Successfully");
-                    displayWhite(y);
-                }
-            }
-            else{
-                System.out.println("Invalid Move");
-                displayBlack(y);
-            }
-        }
-        else{
-            System.out.println("Invalid Move");
-            displayBlack(y);
-        }
-    }
-    public static void bbishop(int f1,int f2,int t1,int t2,char a[][]){
-    }
-    public static void wbishop(int f1,int f2,int t1,int t2,char a[][]){
-    }
-    public static void bpawn(int f1,int f2,int t1,int t2,char a[][]){
-        if((t1-f1)>2){
-            System.out.println("Invalid Move ! -- Enter Valid Move");
-            displayBlack(a);
-        }
-        else if(a[t1][t2]=='.'&&a[f1+1][f2]=='.'&&f2==t2){
-            if(f1==3){
-                a[t1][t2]=a[f1][f2];
-                a[f1][f2]='.';
-                System.out.println("Moved Successfully !");
-                displayWhite(a);
-            }
-            else if(f1!=8&&(t1-f1)==1){
-                a[t1][t2]=a[f1][f2];
-                a[f1][f2]='.';
-                System.out.println("Moved Successfully !");
-                displayWhite(a);
-            }
-            else{
-                System.out.println("Invalid Move ! -- Enter Valid Move");
-                displayBlack(a);
-            }
-        }
-        else if((a[f1+1][f2-1]>=65&&a[f1+1][f2-1]<=90)||(a[f1+1][f2+1]>=65&&a[f1+1][f2+1]<=90)&&(f1!=3)){
-            a[t1][t2]=a[f1][f2];
-            a[f1][f2]='.';
-            System.out.println("Moved Successfully !");
-            System.out.println("One Coin Captured");
-            displayWhite(a);
-        }
-        else{
-            System.out.println("Invalid Move ! -- Enter Valid Move");
-            displayBlack(a);
-        }
-    }
-    public static void wpawn(int f1,int f2,int t1,int t2,char a[][]){
-        if((f1-t1)>2){
-            System.out.println("Invalid Move ! -- Enter Valid Move");
-            displayWhite(a);
-        }
-        //First Pawn's Move
-        else if(a[t1][t2]=='.'&&a[f1-1][f2]=='.'&&f2==t2){
-            if(f1==8){
-                a[t1][t2]=a[f1][f2];
-                a[f1][f2]='.';
-                System.out.println("Moved Successfully !");
-                displayBlack(a);
-            }
-            else if(f1!=8&&(f1-t1)==1){
-                a[t1][t2]=a[f1][f2];
-                a[f1][f2]='.';
-                System.out.println("Moved Successfully !");
-                displayBlack(a);
-            }
-            else{
-                System.out.println("Invalid Move ! -- Enter Valid Move");
-                displayWhite(a);
-            }
-        }
-        //Next Pawn's Move
-        else if((a[f1-1][f2+1]>=97&&a[f1-1][f2+1]<=122)||(a[f1-1][f2-1]>=97&&a[f1-1][f2-1]<=122)&&(f1!=8)){
-            a[t1][t2]=a[f1][f2];
-            a[f1][f2]='.';
-            System.out.println("Moved Successfully !");
-            System.out.println("One Coin Captured");
-            displayBlack(a);
-        }
-        else{
-            System.out.println("Invalid Move ! -- Enter Valid Move");
-            displayWhite(a);
-        }
-        //System.out.println(f1+" "+f2+" "+t1+" "+t2);
-    }
-    public static void wrook(int a,int b,int c,int d,char y[][]){
-        int row=a>c?a-c:c-a;
-        int col=b>d?b-d:d-b;
-        int k,l,m,n;
-        k=a>c?c:a;
-        l=a<c?c:a;
-        m=b>d?d:b;
-        n=b<d?d:b;
-        if(row>0&&col==0||row==0&&col>0){
-        if(row>0&&col==0){
-            for(int i=k;i<l;i++){
-                if(y[c][d]=='P'||y[c][d]=='N'||y[c][d]=='R'||y[c][d]=='B'||y[c][d]=='Q'){
-                    System.out.println("Invalid input ! -- Enter Valid Move");
-                    return;
-                }
-            }
-            if(y[c][d]=='p'||y[c][d]=='n'||y[c][d]=='r'||y[c][d]=='b'||y[c][d]=='q') {
-                System.out.println("One Coin Captured");
-            }
-                y[a][b] = '.';
-                y[c][d] = 'R';
-                System.out.println("Moved Successfully !");
-                displayBlack(y);
-
+            System.out.println("Invalid Move !!");
+            if(Character.isUpperCase(y[a][b])){
 
             }
-        else if (row==0&&col>0) {
-            for(int i=m;i<n;i++){
-                if(y[c][d]=='P'||y[c][d]=='N'||y[c][d]=='R'||y[c][d]=='B'||y[c][d]=='Q'){
-                    System.out.println("Invalid input ! -- Enter Valid Move");
-                    return;
-                }
-            }
-            if(y[c][d]=='p'||y[c][d]=='n'||y[c][d]=='r'||y[c][d]=='b'||y[c][d]=='q') {
-                System.out.println("One Coin Captured");
-            }
-                y[a][b] = '.';
-                y[c][d] = 'R';
-
-                System.out.println("Moved Successfully !");
-                displayBlack(y);
-
-
-            }
-
         }
-        else
-            System.out.println("Invalid input ! -- Enter Valid Move");
     }
-    public static void brook(int f1,int f2,int t1,int t2,char a[][]){
-    }
-    public static void displayWhite(char a[][]){
+    public static void display(char a[][]){
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 11; j++) {
                 System.out.print(a[i][j] + "  ");
             }
             System.out.println();
         }
-        System.out.println("Now White's Turn-----");
     }
-    public static void displayBlack(char a[][]){
-        for (int i = 0; i<11 ; i++) {
-            for (int j = 0; j<11 ; j++) {
-                System.out.print(a[i][j] + "  ");
+    public static void bqueen(int a,int b,int c,int d,char y[][]){
+        boolean isValid = false;
+        boolean isCapture = false;
+        char t=y[c][d];
+        if (Math.abs(a - c) == Math.abs(b - d) && Math.abs(a - c) > 0) {
+            boolean pathClear = true;
+            int rowStep = a < c ? 1 : -1;
+            int colStep = b < d ? 1 : -1;
+            int currRow = a + rowStep;
+            int currCol = b + colStep;
+            while (currRow != c && currCol != d) {
+                if (y[currRow][currCol] != '.') {
+                    pathClear = false;
+                    break;
+                }
+                currRow += rowStep;
+                currCol += colStep;
             }
-            System.out.println();
+
+            if (pathClear) {
+                if (t == '.' || Character.isUpperCase(t)) {
+                    isValid = true;
+                    if (Character.isUpperCase(t)) {
+                        isCapture = true;
+                    }
+                }
+            }
+            check(isValid, isCapture, y, a, b, c, d);
         }
-        System.out.println("Now Black's Turn-----");
+        else if(a==c||b==d){
+                boolean pathClear=true;
+                if (a==c){
+                    int min=b<d?b:d;
+                    int max=b>d?b:d;
+                    for(int i=min+1;i<max;i++) {
+                        if (y[a][i]!='.')
+                            pathClear = false;
+                    }
+                }
+                else {
+                    int min=a<c?a:c;
+                    int max=a>c?a:c;
+                    for (int i = min + 1; i < max; i++) {
+                        if (y[i][b] != '.')
+                            pathClear = false;
+                    }
+                }
+                if (pathClear && (t == '.' || Character.isUpperCase(t))) {
+                    isValid = true;
+                    if (Character.isUpperCase(t))
+                        isCapture = true;
+                }
+                check(isValid, isCapture, y, a, b, c, d);
+        }
+        else{
+            check(isValid, isCapture, y, a, b, c, d);
+        }
+    }
+    public static void wqueen(int a,int b,int c,int d,char y[][]){
+        boolean isValid = false;
+        boolean isCapture = false;
+        char t=y[c][d];
+        if (Math.abs(a - c) == Math.abs(b - d) && Math.abs(a - c) > 0) {
+            boolean pathClear = true;
+            int rowStep = a < c ? 1 : -1;
+            int colStep = b < d ? 1 : -1;
+            int currRow = a + rowStep;
+            int currCol = b + colStep;
+            while (currRow != c && currCol != d) {
+                if (y[currRow][currCol] != '.') {
+                    pathClear = false;
+                    break;
+                }
+                currRow += rowStep;
+                currCol += colStep;
+            }
+
+            if (pathClear) {
+                if (t == '.' || Character.isLowerCase(t)) {
+                    isValid = true;
+                    if (Character.isLowerCase(t)) {
+                        isCapture = true;
+                    }
+                }
+            }
+            check(isValid, isCapture, y, a, b, c, d);
+        }
+        else if(a==c||b==d){
+            boolean pathClear=true;
+            if (a==c){
+                int min=b<d?b:d;
+                int max=b>d?b:d;
+                for(int i=min+1;i<max;i++) {
+                    if (y[a][i]!='.')
+                        pathClear = false;
+                }
+            }
+            else {
+                int min=a<c?a:c;
+                int max=a>c?a:c;
+                for (int i = min + 1; i < max; i++) {
+                    if (y[i][b] != '.')
+                        pathClear = false;
+                }
+            }
+            if(pathClear && (t == '.' || Character.isLowerCase(t))) {
+                isValid = true;
+                if (Character.isLowerCase(t))
+                    isCapture = true;
+            }
+            check(isValid, isCapture, y, a, b, c, d);
+        }
+        else{
+            check(isValid, isCapture, y, a, b, c, d);
+        }
+    }
+    public static void bking(int a,int b,int c,int d,char y[][]){
+        boolean isValid = false;
+        boolean isCapture = false;
+        char t = y[c][d];
+        int t1=Math.abs(a-c);
+        int t2=Math.abs(b-d);
+        if(Character.isLowerCase(t)) 
+            check(isValid, isCapture, y, a, b, c, d);
+        if(t1==1&&t2==1){
+            if(t=='.'||Character.isUpperCase(t)){
+                isValid=true;
+                if(Character.isUpperCase(t)){
+                    isCapture=true;
+                }
+            }
+        }
+        else if(Math.abs(a-c)==1||Math.abs(b-d)==1){
+            if(t1==0&&t2==1){
+                isValid=true;
+                if(Character.isUpperCase(t)){
+                    isCapture=true;
+                }
+            }
+            if(t1==1&&t2==0){
+                isValid=true;
+                if(Character.isUpperCase(t)){
+                    isCapture=true;
+                }
+            }
+        }
+        check(isValid, isCapture, y, a, b, c, d);
+        //System.out.println(a+" "+b+" "+c+" "+d);
+    }
+    public static void wking(int a,int b,int c,int d,char y[][]){
+        boolean isValid = false;
+        boolean isCapture = false;
+        char t = y[c][d];
+        int t1=Math.abs(a-c);
+        int t2=Math.abs(b-d);
+        if(Character.isUpperCase(t)) 
+            check(isValid, isCapture, y, a, b, c, d);
+        if(t1==1&&t2==1){
+            if(t=='.'||Character.isLowerCase(t)){
+                isValid=true;
+                if(Character.isLowerCase(t)){
+                    isCapture=true;
+                }
+            }
+        }
+        else if(t1==1||t2==1){
+            if(t1==0&&t2==1){
+                isValid=true;
+                if(Character.isLowerCase(t)){
+                    isCapture=true;
+                }
+            }
+            if(t1==1&&t2==0){
+                isValid=true;
+                if(Character.isLowerCase(t)){
+                    isCapture=true;
+                }
+            }
+        }
+        check(isValid, isCapture, y, a, b, c, d);
+        //System.out.println(a+" "+b+" "+c+" "+d);
+    }
+    public static void wknight(int a,int b,int c,int d,char[][] y){
+        int row=Math.abs(a-c);
+        int col=Math.abs(b-d);
+        boolean isValid = false;
+        boolean isCapture = false;
+        if ((row==2&&col==1)||(row==1&&col==2)) {
+            char t = y[c][d];
+            if (t == '.' || Character.isLowerCase(t)) {
+                isValid = true;
+                if (Character.isLowerCase(t)) {
+                    isCapture = true;
+                }
+            }
+        }
+        check(isValid, isCapture, y, a, b, c, d);
+    }
+    public static void bknight(int a, int b, int c, int d, char[][] y) {
+        int row=Math.abs(a-c);
+        int col=Math.abs(b-d);
+        boolean isValid = false;
+        boolean isCapture = false;
+            if ((row==2&&col==1)||(row==1&&col==2)) {
+                char t = y[c][d];
+                if (t == '.' || Character.isUpperCase(t)) {
+                    isValid = true;
+                    if (Character.isUpperCase(t)) {
+                        isCapture = true;
+                    }
+                }
+            }
+
+        check(isValid, isCapture, y, a, b, c, d);
+    }
+    public static void bbishop(int a, int b, int c, int d, char[][] y) {
+        boolean isValid = false;
+        boolean isCapture = false;
+        if (Math.abs(a - c) == Math.abs(b - d) && Math.abs(a - c) > 0) {
+            boolean pathClear = true;
+            int rowStep = a < c ? 1 : -1;
+            int colStep = b < d ? 1 : -1;
+            int currRow = a + rowStep;
+            int currCol = b + colStep;
+            while (currRow != c && currCol != d) {
+                if (y[currRow][currCol] != '.') {
+                    pathClear = false;
+                    break;
+                }
+                currRow += rowStep;
+                currCol += colStep;
+            }
+            if (pathClear) {
+                char t = y[c][d];
+                if (t == '.' || Character.isUpperCase(t)) {
+                    isValid = true;
+                    if (Character.isUpperCase(t)) {
+                        isCapture = true;
+                    }
+                }
+            }
+        }
+        check(isValid, isCapture, y, a, b, c, d);
+    }
+    public static void wbishop(int a, int b, int c, int d, char[][] y){
+        boolean isValid = false;
+        boolean isCapture = false;
+        if (Math.abs(a - c) == Math.abs(b - d) && Math.abs(a - c) > 0) {
+            boolean pathClear = true;
+            int rowStep = a < c ? 1 : -1;
+            int colStep = b < d ? 1 : -1;
+            int currRow = a + rowStep;
+            int currCol = b + colStep;
+            while (currRow != c && currCol != d) {
+                if (y[currRow][currCol] != '.') {
+                    pathClear = false;
+                    break;
+                }
+                currRow += rowStep;
+                currCol += colStep;
+            }
+            if (pathClear) {
+                char t = y[c][d];
+                if (t == '.' || Character.isLowerCase(t)) {
+                    isValid = true;
+                    if (Character.isLowerCase(t)) {
+                        isCapture = true;
+                    }
+                }
+            }
+        }
+        check(isValid, isCapture, y, a, b, c, d);
+    }
+    public static void wpawn(int a, int b, int c, int d, char[][] y) {
+        char t = y[c][d];
+        boolean isValid = false;
+        boolean isCapture = false;
+        if (b == d && t == '.') {
+            if (a - c == 1)
+                isValid = true;
+            else if (a - c == 2 && a == 8 && y[a - 1][b] == '.')
+                isValid = true;
+        }
+        else if (a - c == 1 && Math.abs(b - d) == 1 && Character.isLowerCase(t)) {
+            isValid = true; isCapture = true;
+        }
+        check(isValid,isCapture,y,a,b,c,d);
+    }
+    public static void bpawn(int a, int b, int c, int d, char[][] y) {
+        char t = y[c][d];
+        boolean isValid = false;
+        boolean isCapture = false;
+
+        if (b == d && t == '.') {
+            if (c - a == 1)
+                isValid = true;
+            else if (c - a == 2 && a == 3 && y[a + 1][b] == '.')
+                isValid = true;
+        }
+        else if (c - a == 1 && Math.abs(b - d) == 1 && Character.isUpperCase(t)) {
+            isValid = true;
+            isCapture = true;
+        }
+        check(isValid,isCapture,y,a,b,c,d);
+    }
+    public static void wrook(int a,int b,int c,int d,char y[][]){
+        boolean isValid=false;
+        boolean isCapture=false;
+        char t=y[c][d];
+        if (a==c||b==d){
+            boolean pathClear=true;
+            if (a==c){
+                int min=b<d?b:d;
+                int max=b>d?b:d;
+                for(int i=min+1;i<max;i++) {
+                    if (y[a][i]!='.')
+                        pathClear = false;
+                }
+            }
+            else {
+                int min=a<c?a:c;
+                int max=a>c?a:c;
+                for (int i = min + 1; i < max; i++) {
+                    if (y[i][b] != '.')
+                        pathClear = false;
+                }
+            }
+            if(pathClear && (t == '.' || Character.isLowerCase(t))) {
+                isValid = true;
+                if (Character.isLowerCase(t))
+                    isCapture = true;
+            }
+        }
+        check(isValid, isCapture, y, a, b, c, d);
+    }
+        public static void brook(int a, int b, int c, int d, char[][] y) {
+            boolean isValid=false;
+            boolean isCapture=false;
+            char t=y[c][d];
+            if (a==c||b==d){
+                boolean pathClear=true;
+                if (a==c){
+                    int min=b<d?b:d;
+                    int max=b>d?b:d;
+                    for(int i=min+1;i<max;i++) {
+                        if (y[a][i]!='.')
+                            pathClear = false;
+                    }
+                }
+                else {
+                    int min=a<c?a:c;
+                    int max=a>c?a:c;
+                    for (int i = min + 1; i < max; i++) {
+                        if (y[i][b] != '.')
+                            pathClear = false;
+                    }
+                }
+                if (pathClear && (t == '.' || Character.isUpperCase(t))) {
+                    isValid = true;
+                    if (Character.isUpperCase(t))
+                        isCapture = true;
+                }
+            }
+            check(isValid, isCapture, y, a, b, c, d);
     }
 }
