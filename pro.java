@@ -112,9 +112,6 @@ public class pro {
         } 
         else {
             System.out.println("Invalid Move !!");
-            if(Character.isUpperCase(y[a][b])){
-
-            }
         }
     }
     public static void display(char a[][]){
