@@ -1,5 +1,7 @@
 import java.util.*;
 public class pro {
+    static int first=1;
+    static int r=1;
     public static void main(String[] args) {
         Scanner amg = new Scanner(System.in);
         char[][] a = new char[11][11];
@@ -65,8 +67,22 @@ public class pro {
             }
             System.out.println();
         }
-        System.out.println("First White's Move.....");
         while (true) {
+            if(first>0) System.out.println("First Move - White's Move.....");
+            first--;
+            
+            // --- NEW CHECKMATE LOGIC START ---
+            boolean isWhiteTurn = (r % 2 == 1); 
+            if (isCheckmate(a, isWhiteTurn)) {
+                System.out.println("CHECKMATE!");
+                if (isWhiteTurn) {
+                    System.out.println("Black Wins!");
+                } else {
+                    System.out.println("White Wins!");
+                }
+                break; 
+            }
+
             System.out.print("Enter your Move : ");
             String input = amg.nextLine();
             String[] parts = input.split(" ");
@@ -74,13 +90,80 @@ public class pro {
                 identify(parts[0], parts[1], a);
             }
         }
+    } 
+    
+    public static boolean isCheckmate(char[][] y, boolean isW) {
+        if (!isCheck(y, isW)) return false; 
+        for (int a = 2; a <= 9; a++) for (int b = 2; b <= 9; b++) {
+            char p = y[a][b];
+            if (p != '.' && Character.isUpperCase(p) == isW) {
+                for (int c = 2; c <= 9; c++) for (int d = 2; d <= 9; d++) {
+                    if (canAttack(y, p, a, b, c, d)) {
+                        char t = y[c][d]; y[c][d] = p; y[a][b] = '.';
+                        boolean stillCheck = isCheck(y, isW);
+                        y[a][b] = p; y[c][d] = t;
+                        if (!stillCheck) return false; 
+                    }
+                }
+            }
+        }
+        return true; 
+    }
+
+    public static boolean isCheck(char[][] y, boolean isW) {
+        int kr = -1, kc = -1;
+        for (int i = 2; i <= 9; i++) {
+            for (int j = 2; j <= 9; j++) {
+                if (y[i][j] == (isW ? 'K' : 'k')) { kr = i; kc = j; }
+            }
+        }
+            
+        for (int i = 2; i <= 9; i++){ 
+            for (int j = 2; j <= 9; j++) {
+            // If the piece exists and belongs to the enemy, see if it attacks the King
+                if (y[i][j] != '.' && Character.isLowerCase(y[i][j]) == isW) {
+                    if (canAttack(y, y[i][j], i, j, kr, kc)) 
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean canAttack(char[][] y, char P, int a, int b, int c, int d) {
+        char t = y[c][d];
+        // Cannot attack own pieces
+        if (t != '.' && Character.isUpperCase(P) == Character.isUpperCase(t))
+        return false;
+
+        int dr = Math.abs(a - c), dc = Math.abs(b - d);
+        char p = Character.toLowerCase(P);
+        boolean clr = isPathClear(y, a, b, c, d);
+
+        if (p == 'p') return (Character.isUpperCase(P) ? a - c == 1 : c - a == 1) && dc == 1;
+        if (p == 'n') return (dr == 2 && dc == 1) || (dr == 1 && dc == 2);
+        if (p == 'k') return dr <= 1 && dc <= 1;
+        if (p == 'r') return (a == c || b == d) && clr;
+        if (p == 'b') return (dr == dc) && clr;
+        if (p == 'q') return (a == c || b == d || dr == dc) && clr;
+        
+        return false;
+    }
+
+    public static boolean isPathClear(char[][] y, int a, int b, int c, int d) {
+        int dr = Integer.compare(c, a), dc = Integer.compare(d, b);
+        for (int r = a + dr, col = b + dc; r != c || col != d; r += dr, col += dc)
+            if (y[r][col] != '.') return false;
+        return true;
     }
     public static void identify(String f, String t, char[][] a) {
         int f1 = '8' - f.charAt(1) + 2;
         int f2 = f.charAt(0) - 'a' + 2;
         int t1 = '8' - t.charAt(1) + 2;
         int t2 = t.charAt(0) - 'a' + 2;
+
         char piece = a[f1][f2];
+
         switch (piece) {
             case 'p': bpawn(f1, f2, t1, t2, a);   break;
             case 'P': wpawn(f1, f2, t1, t2, a);   break;
@@ -99,29 +182,52 @@ public class pro {
                 break;
         }
     }
-    public static void check(boolean isValid ,boolean isCapture,char [][]y,int a,int b,int c,int d){
-        char t=y[a][b];
-        if (isValid) {
-            y[c][d] = y[a][b];
-            y[a][b] = '.';
-            System.out.println("Moved Successfully !");
-            if (isCapture)
-                System.out.println("One Piece Captured !");
-            if(Character.isLowerCase(y[a][b]))
-                display(y);
-        } 
-        else {
+    public static void check(boolean isValid, boolean isCap, char[][] y, int a, int b, int c, int d) {
+        boolean isW = (r % 2 == 1);
+        char p = y[a][b];
+        
+        // Instantly reject if invalid or moving the wrong color
+        if (!isValid || p == '.' || Character.isUpperCase(p) != isW) {
             System.out.println("Invalid Move !!");
+            return;
+        }
+
+        // Simulate
+        char t = y[c][d];
+        y[c][d] = p;
+        y[a][b] = '.';
+
+        // Verify Safety
+        if (isCheck(y, isW)) {
+            y[a][b] = p;
+            y[c][d] = t; 
+            System.out.println("Invalid Move !! That leaves your King in Check.");
+        } else {
+            System.out.println("Moved Successfully !");
+            if (isCap) 
+            System.out.println("One Piece Captured !");
+            if (isCheck(y, !isW))
+            System.out.println("CHECK!");
+
+            display(y, c, d);
         }
     }
-    public static void display(char a[][]){
+    public static void display(char y[][],int c,int d){
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 11; j++) {
-                System.out.print(a[i][j] + "  ");
+                System.out.print(y[i][j] + "  ");
             }
             System.out.println();
         }
+        if(r%2==1&&Character.isUpperCase(y[c][d])){
+            System.out.println("Black's Move.....");
+        }
+        else if(r%2==0&&Character.isLowerCase(y[c][d])){
+            System.out.println("White's Move.....");
+        }
+        r++;
     }
+    
     public static void bqueen(int a,int b,int c,int d,char y[][]){
         boolean isValid = false;
         boolean isCapture = false;
@@ -269,7 +375,6 @@ public class pro {
             }
         }
         check(isValid, isCapture, y, a, b, c, d);
-        //System.out.println(a+" "+b+" "+c+" "+d);
     }
     public static void wking(int a,int b,int c,int d,char y[][]){
         boolean isValid = false;
@@ -302,7 +407,6 @@ public class pro {
             }
         }
         check(isValid, isCapture, y, a, b, c, d);
-        //System.out.println(a+" "+b+" "+c+" "+d);
     }
     public static void wknight(int a,int b,int c,int d,char[][] y){
         int row=Math.abs(a-c);
